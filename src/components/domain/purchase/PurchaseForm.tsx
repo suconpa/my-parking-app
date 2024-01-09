@@ -7,12 +7,12 @@ import {
   RadioGroup,
   Typography,
 } from "@mui/material";
-import { CommonButtonMiddle } from "../../UI/CommonButton";
+import { CommonButtonMiddle, CommonButtonSmall } from "../../UI/CommonButton";
 import PurchaseInformation from "./PurchaseInformation";
 import classes from "./purchase.module.css";
 
 interface PurchaseFormProps {
-  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  onSubmit?: (e: React.FormEvent<HTMLFormElement>) => void;
   onChange: (e: React.SyntheticEvent<Element, Event>) => void;
   total: number;
 }
@@ -45,7 +45,7 @@ const PurchaseForm: React.FC<PurchaseFormProps> = ({
                 onChange={onChange}
               />
               <FormControlLabel
-                value="noPassBook"
+                value="vbank"
                 control={<Radio />}
                 label="무통장입금"
                 onChange={onChange}
@@ -78,7 +78,6 @@ const PurchaseForm: React.FC<PurchaseFormProps> = ({
             >
               총 {total} 원
             </Typography>
-            <CommonButtonMiddle text="결제" />
           </Box>
         </form>
       </Box>

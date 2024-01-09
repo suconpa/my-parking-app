@@ -8,34 +8,18 @@ import { BASE_URL } from "../../../services/BaseUrl";
 import classes from "./purchase.module.css";
 import MediaQuery from "../../UI/MediaQuery";
 import { Toast } from "../../UI/Toast";
+import PaymentMethod from "./PaymentMethod";
 
 const Purchase = () => {
   const navigate = useNavigate();
   const isMobile = MediaQuery();
   const productDetailData = useBoundStore((state) => state.productDetailData);
-
-  const axiosInstance = useCustomAxios();
-  const userBasicInfo = useBoundStore((state) => state.userBasicInfo);
   const [checked, setChecked] = useState({ name: "", value: false });
 
-  const setIsToastOpen = useBoundStore((state) => state.setIsToastOpen);
-  const setAlertText = useBoundStore((state) => state.setAlertText);
-  const setBgColor = useBoundStore((state) => state.setBgColor);
+
   const isToastOpen = useBoundStore((state) => state.isToastOpen);
   const alertText = useBoundStore((state) => state.alertText);
   const bgColor = useBoundStore((state) => state.bgColor);
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    // 결제수단을 입력하지 않을 시 경고 창
-    if (!checked.value) {
-      setIsToastOpen(true);
-      setAlertText("결제수단을 입력해주세요");
-      setBgColor("var(--toast-error)");
-    } else if (checked.value) {
-      postData();
-    }
-  };
 
   const handleOnChange = (
     e:
@@ -51,39 +35,6 @@ const Purchase = () => {
       name: selectedValue,
       value: true,
     }));
-  };
-
-  // 오늘 날짜 받아오는 함수
-  const nowDate = () => {
-    const year = new Date().getFullYear();
-    const month = new Date().getMonth() + 1;
-    const day = new Date().getDate();
-    return `${year}.${month}.${day}`;
-  };
-
-  const postData = async () => {
-    const body = {
-      products: [
-        {
-          _id: productDetailData._id,
-          quantity: productDetailData.quantity,
-        },
-      ],
-      address: {
-        name: userBasicInfo.address,
-        value: productDetailData.name,
-      },
-      extra: {
-        buyDate: nowDate(),
-      },
-    };
-
-    try {
-      await axiosInstance.post("/orders", body);
-      navigate("/purchase/result");
-    } catch (error) {
-      console.error("결제 에러");
-    }
   };
 
   return (
@@ -107,11 +58,9 @@ const Purchase = () => {
         endDate={productDetailData.extra.endDate}
         sellerId={productDetailData.seller_id}
       />
-      <PurchaseForm
-        onSubmit={handleSubmit}
-        onChange={handleOnChange}
-        total={productDetailData.price}
-      />
+      <PurchaseForm onChange={handleOnChange} total={productDetailData.price} />
+      {/* paymentOption 에 따라 결제 방식이 달라집니다. */}
+      <PaymentMethod disabled={!checked.value} paymentOption={checked.name} />
       <Toast
         isToastOpen={isToastOpen}
         alertText={alertText}
