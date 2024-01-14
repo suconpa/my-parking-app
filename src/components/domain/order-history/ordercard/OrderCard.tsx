@@ -23,6 +23,8 @@ interface OrderCardProps {
   flexDirection?: string;
   btnText?: string;
   disabled?: boolean;
+  onLoad?: () => void;
+  display: string;
 }
 
 const OrderCard: React.FC<OrderCardProps> = ({
@@ -39,6 +41,8 @@ const OrderCard: React.FC<OrderCardProps> = ({
   flexDirection,
   btnText,
   disabled,
+  onLoad,
+  display,
   // sellerId,
 }) => {
   const isDark = useBoundStore((state) => state.isDark);
@@ -48,7 +52,11 @@ const OrderCard: React.FC<OrderCardProps> = ({
   }
 
   return (
-    <>
+    <Box
+      sx={{
+        display: display,
+      }}
+    >
       <Box
         sx={{
           display: "flex",
@@ -86,6 +94,7 @@ const OrderCard: React.FC<OrderCardProps> = ({
               marginTop: "20px",
               marginBottom: "20px",
             }}
+            onLoad={onLoad}
           />
         </Box>
         <Box
@@ -140,7 +149,7 @@ const OrderCard: React.FC<OrderCardProps> = ({
           )}
         </Box>
       </Box>
-    </>
+    </Box>
   );
 };
 
