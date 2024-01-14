@@ -1,13 +1,12 @@
 import React from "react";
 import Skeleton from "react-loading-skeleton";
-import classes from "./OrderHistoryListSkeleton.module.css";
 import { Box } from "@mui/system";
 import MediaQuery from "../../../UI/MediaQuery";
 
 const OrderHistoryListSkeleton = () => {
   const isMobile = MediaQuery();
   return (
-    <div className={classes.OrderHistoryListSkeletonContainer}>
+    <div>
       <Box
         sx={{
           display: "flex",
@@ -25,7 +24,7 @@ const OrderHistoryListSkeleton = () => {
             flex: isMobile ? 2 : undefined,
           }}
         >
-          <div className={classes.orderDate}>
+          <div>
             <Skeleton />
           </div>
           <Skeleton height={"10vh"} />
