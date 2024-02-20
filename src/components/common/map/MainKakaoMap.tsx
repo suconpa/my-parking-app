@@ -17,6 +17,7 @@ import { Box } from "@mui/material";
 
 import USER_MARKER from "../../../assets/images/user-marker2-image.png";
 import PARKING_MARKER from "../../../assets/images/parking-marker-image.png";
+import NOIMAGE from "../../../assets/images/car-image.png";
 
 // 홈페이지 메인 지도 서비스
 type Props = {
@@ -54,7 +55,6 @@ const MainKakaoMap = ({
   const setIsToastOpen = useBoundStore((state) => state.setIsToastOpen);
   const setAlertText = useBoundStore((state) => state.setAlertText);
 
-
   useEffect(() => {
     // 해당하는 bounds영역에 맞는 범위의 상품리스트 요청
     searchProducts();
@@ -79,7 +79,6 @@ const MainKakaoMap = ({
     setAlertText("현재위치를 불러오고 있습니다. 잠시만 기다려주세요!");
     handleFetchNowLocation();
   };
-
 
   return (
     <Box
@@ -106,7 +105,8 @@ const MainKakaoMap = ({
           searchProducts();
         }}
         onDragEnd={() => {
-          searchProducts()
+          searchProducts();
+          setSelectedMarker(null); // 지도 움직일시 클릭한 오버레이 초기화
         }}
         maxLevel={7}
       >
@@ -172,7 +172,11 @@ const MainKakaoMap = ({
                     startDate={el.extra?.startDate}
                     endDate={el.extra?.endDate}
                     linkId={el?._id}
-                    mainImage={el.mainImages && BASE_URL + el.mainImages[0].url}
+                    mainImage={
+                      el.mainImages?.length !== 0
+                        ? BASE_URL + el.mainImages[0].url
+                        : NOIMAGE
+                    }
                   />
                 </CustomOverlayMap>
               )}

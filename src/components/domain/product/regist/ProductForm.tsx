@@ -34,6 +34,7 @@ const ProductForm = ({ title, onSubmit, product }: Props) => {
       lat: product.extra?.lat,
       lng: product.extra?.lng,
     },
+    mainImages: product.mainImages
   });
   const inputRefImage = useRef<HTMLInputElement>(null);
   const [mainImages, setMainImages] = useState<mainImageType[] | undefined>([]);

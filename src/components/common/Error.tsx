@@ -17,9 +17,9 @@ const Error = () => {
           fontSize: "25px",
           fontWeight: 600,
         }}
-        onClick={() => navigate(-1)}
+        onClick={() => navigate("/home")}
       >
-        이전 페이지로 돌아가기
+        홈 페이지로 돌아가기
       </Button>
     </div>
   );

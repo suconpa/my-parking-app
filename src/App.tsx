@@ -1,168 +1,173 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
-import RootLayout from "./router/layouts/RootLayout";
+import Theme from "./components/UI/Theme";
+
+import PrivateRoute from "./router/layouts/PrivateRoute";
+import UserTypeRoute from "./router/layouts/UserTypeRoute";
+import LayoutRoute from "./router/layouts/LayoutRoute";
+
 import ErrorPage from "./pages/ErrorPage";
 import LandingPage from "./pages/LandingPage";
-// 오오스
+import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/auth/LoginPage";
 import SignUpPage from "./pages/auth/SignUpPage";
-// 회원
+
+import ProductDetailPage from "./pages/products/ProductDetailPage";
+import ProductRegistPage from "./pages/products/ProductRegistPage";
+import ProductEditPage from "./pages/products/ProductEditPage";
+
 import MyPage from "./pages/my-services/MyPage";
 import MyPageEditPage from "./pages/my-services/MyPageEditPage";
-// 상품
-import HomePage from "./pages/HomePage";
-import ProductDetailPage from "./pages/products/ProductDetailPage";
-import ProductEditPage from "./pages/products/ProductEditPage";
-import ProductRegistPage from "./pages/products/ProductRegistPage";
-// 주문
-import OrderHistoryPage from "./pages/order-hisotry/OrderHistoryPage";
-import OrderHistoryDetailPage from "./pages/order-hisotry/OrderHistoryDetailPage";
-// 구매
+import MyProductPage from "./pages/my-services/MyProductPage";
+
 import PurchasePage from "./pages/purchase/PurchaseFormPage";
 import PurchaseResultPage from "./pages/purchase/PurchaseResultPage";
-import SearchPage from "./pages/SearchPage";
-import Theme from "./components/UI/Theme";
-import ReplyPage from "./pages/reply/ReplyPage";
+
 import SellerRepliesPage from "./pages/reply/SellerRepliesPage";
-import MyProductPage from "./pages/my-services/MyProductPage";
+import ReplyPage from "./pages/reply/ReplyPage";
 import MyReplyPage from "./pages/reply/MyReplyPage";
 
+import OrderHistoryPage from "./pages/order-hisotry/OrderHistoryPage";
+import OrderHistoryDetailPage from "./pages/order-hisotry/OrderHistoryDetailPage";
+
 // 라우터 설정
-
 const router = createBrowserRouter([
+  // 로그인(토큰 X)을 하진 않았을때만 접근 가능 페이지
   {
     path: "/",
-    id: "NoLayout",
-    element: (
-      <RootLayout
-        isNeedLoggedIn={false}
-        hasHeader={false}
-        hasFooter={false}
-        hasSearchHeader={false}
-      />
-    ),
+    element: <PrivateRoute isNeedLoggedIn={false} />,
     errorElement: <ErrorPage />,
     children: [
       {
-        path: "/",
-        element: <LandingPage />,
-      },
-      {
-        path: "/home",
-        element: <HomePage />,
-      },
-      {
-        path: "/login",
-        element: <LoginPage />,
-      },
-      {
-        path: "/signup",
-        element: <SignUpPage />,
-      },
-      {
-        path: "/error",
-        element: <ErrorPage />,
+        element: <LayoutRoute hasHeader={true} hasFooter={false} />,
+        children: [
+          {
+            path: "login",
+            element: <LoginPage />,
+          },
+          {
+            path: "signup",
+            element: <SignUpPage />,
+          },
+        ],
       },
     ],
   },
-
+  // 로그인(토큰 O)을 해야만 접근 가능 페이지
   {
     path: "/",
-    id: "noLayoutAndNeedLoggedIn",
-    element: (
-      <RootLayout
-        isNeedLoggedIn={true}
-        hasHeader={false}
-        hasFooter={false}
-        hasSearchHeader={false}
-      />
-    ),
+    element: <PrivateRoute isNeedLoggedIn={true} />,
     errorElement: <ErrorPage />,
     children: [
       {
-        path: "search",
-        element: <SearchPage />,
-      },
-    ],
-  },
-  {
-    path: "/",
-    id: "withHeaderAndFooterLayout",
-    element: (
-      <RootLayout
-        isNeedLoggedIn={true}
-        hasHeader={true}
-        hasFooter={true}
-        hasSearchHeader={false}
-      />
-    ),
-    errorElement: <ErrorPage />,
-    children: [
-      // 회원
-      {
-        id: "mypage",
-        path: "mypage",
+        element: <LayoutRoute hasHeader={true} hasFooter={true} />,
         children: [
           {
-            path: ":userId",
-            element: <MyPage />,
-          },
-          {
-            path: ":userId/edit",
-            element: <MyPageEditPage />,
-          },
-          {
-            path: ":userId/mylist",
-            element: <MyProductPage />,
-          },
-        ],
-      },
-      //마이페이지 주문
-      {
-        id: "order-history",
-        path: "order-history",
-        children: [
-          {
-            index: true,
-            element: <OrderHistoryPage />,
-          },
-          {
-            path: "/order-history/:orderId",
-            element: <OrderHistoryDetailPage />,
-          },
-        ],
-      },
-      {
-        id: "myreply",
-        path: "/reply",
-        children: [
-          // 내가 쓴 리뷰 보기
-          {
-            path: "replies",
-            element: <MyReplyPage />,
-          },
-        ],
-      },
-      // 상품
-      {
-        id: "products",
-        path: "products",
-        children: [
-          {
-            path: "regist",
-            element: <ProductRegistPage />,
-          },
-          {
-            id: "product-detail",
-            path: ":productId",
+            // 회원(공통)
+            path: "mypage",
             children: [
               {
-                index: true,
-                element: <ProductDetailPage />,
+                path: ":userId",
+                element: <MyPage />,
               },
               {
-                path: "edit",
-                element: <ProductEditPage />,
+                path: ":userId/edit",
+                element: <MyPageEditPage />,
+              },
+            ],
+          },
+          {
+            // 리뷰(공통) - 판매자 리뷰 보는 페이지
+            path: "reply/seller-replies/:sellerId",
+            element: <SellerRepliesPage />,
+          },
+        ],
+      },
+
+      // 로그인한 유저타입이 "seller"일때
+      {
+        element: <UserTypeRoute userType="seller" />,
+        children: [
+          {
+            element: <LayoutRoute hasHeader={true} hasFooter={true} />,
+            children: [
+              {
+                // 회원
+                path: "mypage/:userId/mylist",
+                element: <MyProductPage />,
+              },
+              {
+                // 상품
+                path: "products",
+                children: [
+                  // 상품 등록페이지
+                  {
+                    path: "regist",
+                    element: <ProductRegistPage />,
+                  },
+                  // 상품 수정페이지
+                  {
+                    path: ":productId/edit",
+                    element: <ProductEditPage />,
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+      // 로그인한 유저타입이 "user"일때
+      {
+        element: <UserTypeRoute userType="user" />,
+        children: [
+          {
+            element: <LayoutRoute hasHeader={true} hasFooter={true} />,
+            children: [
+              {
+                // 구매
+                path: "purchase",
+                children: [
+                  // 구매 양식 페이지
+                  {
+                    index: true,
+                    element: <PurchasePage />,
+                  },
+                  // 구매 결과 페이지
+                  {
+                    path: "result",
+                    element: <PurchaseResultPage />,
+                  },
+                ],
+              },
+              {
+                // 리뷰
+                path: "reply",
+                children: [
+                  // 리뷰 쓰는 페이지
+                  {
+                    path: ":productId/:orderId",
+                    element: <ReplyPage />,
+                  },
+                  // 내가 쓴 리뷰 보는 페이지
+                  {
+                    path: "replies",
+                    element: <MyReplyPage />,
+                  },
+                ],
+              },
+              {
+                // 주문 목록
+                path: "order-history",
+                children: [
+                  {
+                    index: true,
+                    element: <OrderHistoryPage />,
+                  },
+                  {
+                    path: ":orderId",
+                    element: <OrderHistoryDetailPage />,
+                  },
+                ],
               },
             ],
           },
@@ -170,50 +175,26 @@ const router = createBrowserRouter([
       },
     ],
   },
-  // 헤더만 랜더링 되는 라우터
+  // 언제든 접근 가능한 페이지
   {
     path: "/",
-    id: "headerOnly",
-    element: (
-      <RootLayout
-        isNeedLoggedIn={false}
-        hasHeader={true}
-        hasFooter={false}
-        hasSearchHeader={false}
-      />
-    ),
+    element: <PrivateRoute isNeedLoggedIn={false} />,
     errorElement: <ErrorPage />,
     children: [
-      // 리뷰
       {
-        id: "reply",
-        path: "/reply",
-        children: [
-          {
-            // 리뷰 쓰는 page
-            path: ":productId/:orderId",
-            element: <ReplyPage />,
-          },
-          // 판매자의 리뷰를 볼 수 있는 page
-          {
-            path: "seller-replies/:sellerId",
-            element: <SellerRepliesPage />,
-          },
-        ],
+        index: true,
+        element: <LandingPage />,
       },
-
-      // 구매
       {
-        id: "purchase",
-        path: "/purchase",
+        path: "home",
+        element: <HomePage />,
+      },
+      {
+        element: <LayoutRoute hasHeader={true} hasFooter={false} />,
         children: [
           {
-            path: "/purchase",
-            element: <PurchasePage />,
-          },
-          {
-            path: "/purchase/result",
-            element: <PurchaseResultPage />,
+            path: "products/:productId",
+            element: <ProductDetailPage />,
           },
         ],
       },
@@ -222,8 +203,6 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  // 다크 모드 테마 생성
-
   return (
     <Theme>
       <RouterProvider router={router} />

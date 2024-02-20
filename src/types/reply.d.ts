@@ -42,3 +42,10 @@ interface MyRepliesItem {
     };
   };
 }
+interface ReplyCheck {
+  data: {
+    item: {
+      content: string;
+    }[];
+  };
+}

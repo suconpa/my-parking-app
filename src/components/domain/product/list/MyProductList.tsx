@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 import classes from "./MyProductList.module.css";
 import Loading from "../../../common/Loading";
-import { useBoundStore } from "../../../../store";
+import {useMyPageSlice } from "../../../../store";
 import MediaQueryMain from "../../../UI/MediaQueryMain";
 import ProductList from "./ProductList";
 import { Box } from "@mui/material";
@@ -11,12 +11,11 @@ import { Box } from "@mui/material";
 const MyProductList = () => {
   const [loading, setLoading] = useState(true);
   const isMobile = MediaQueryMain();
-  const getMyProducts = useBoundStore((state) => state.getMyProducts);
-  const accessToken = useBoundStore((state) => state.userToken.accessToken);
+  const getMyProducts = useMyPageSlice().getMyProducts
   const [myProducts, setMyProducts] = useState<ProductListType>([]);
   const getAndSetMyProducts = async () => {
     setLoading(true);
-    setMyProducts(await getMyProducts(accessToken));
+    setMyProducts(await getMyProducts());
     setLoading(false);
   };
 

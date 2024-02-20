@@ -13,7 +13,7 @@ const SellerInfoComponent = ({ product }: { product: ProductItemType }) => {
   const isDark = useBoundStore((state) => state.isDark);
   const userInfo = useBoundStore((state) => state.myInfo);
 
-  //문제 :  현재 로그인한 유저의 이미지가 보여버림
+  // 문제 :  현재 로그인한 유저의 이미지가 보여버림
   // 등록한 판매자의 이미지가 보여야함
   console.log(userInfo.extra.profileImage);
 

@@ -25,7 +25,8 @@ const MyProfileEdit = () => {
   const bgColor = useBoundStore(state=>state.bgColor)
 
   const fetchAndSetMyInfo = async () => {
-    const myInfo = await Store.getMyInfo(id, Store.userToken.accessToken);
+    setIsLoading(true)
+    const myInfo = await Store.getMyInfo(id);
     Store.setMyInfo(myInfo)
 
     const userExtraInfo: ExtraType = {...new UserExtraInfo(), ...myInfo.extra}
@@ -49,6 +50,7 @@ const MyProfileEdit = () => {
       return acc;
       }, {} as { [key in keyof Required<ExtraType>]: React.MutableRefObject<HTMLInputElement|null> })
     )
+    setIsLoading(false)
   };
 
   useEffect(()=>{
@@ -80,7 +82,7 @@ const MyProfileEdit = () => {
     
     const uploadImage = Store.uploadImage
     const profileImageURL = await uploadImage(imageUploadRef)
-    const updatedInfo = await Store.updateMyInfo(id, Store.userToken.accessToken, {extra: {...myInfo.extra, profileImage: profileImageURL[0]}})
+    const updatedInfo = await Store.updateMyInfo(id, {extra: {...myInfo.extra, profileImage: profileImageURL[0]}})
     Store.setMyInfo({...myInfo, ...updatedInfo})
     
     setIsLoading(false)
@@ -126,7 +128,7 @@ const MyProfileEdit = () => {
     //editedInfo에 담아서 patch하기
     const editedInfo = {...myBasicInfo, extra: {...myExtraInfo}}
     console.log('editedInto:', editedInfo)
-    if (await Store.updateMyInfo(id, Store.userToken.accessToken, editedInfo)){
+    if (await Store.updateMyInfo(id, editedInfo)){
       setIsToastOpen(true)
       setToastMessage("프로필 수정이 완료되었습니다.")
       setBgColor("var(--toast-success)");

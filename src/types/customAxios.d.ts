@@ -1,0 +1,3 @@
+interface customAxiosSlice {
+  useCustomAxios: () => AxiosInstance
+}

@@ -7,7 +7,7 @@ interface ProductItemType {
   show?: boolean;
   active?: boolean;
   name: string;
-  mainImages?: mainImageType[];
+  mainImages: mainImageType[];
   content: string;
   createdAt?: string;
   updatedAt?: string;

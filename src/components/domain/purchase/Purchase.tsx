@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import PurchaseForm from "./PurchaseForm";
 import OrderCard from "../order-history/ordercard/OrderCard";
 import { useBoundStore } from "../../../store";
-import useCustomAxios from "../../../services/useCustomAxios";
-import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../../../services/BaseUrl";
 import classes from "./purchase.module.css";
 import MediaQuery from "../../UI/MediaQuery";
@@ -11,11 +9,9 @@ import { Toast } from "../../UI/Toast";
 import PaymentMethod from "./PaymentMethod";
 
 const Purchase = () => {
-  const navigate = useNavigate();
   const isMobile = MediaQuery();
   const productDetailData = useBoundStore((state) => state.productDetailData);
   const [checked, setChecked] = useState({ name: "", value: false });
-
 
   const isToastOpen = useBoundStore((state) => state.isToastOpen);
   const alertText = useBoundStore((state) => state.alertText);

@@ -1,13 +1,12 @@
 interface MyPageSlice {
   myInfo: UserDetailInfoType;
-  getMyInfo: (id: number, accessToken: string) => Promise<UserDetailInfoType>;
+  getMyInfo: (id: number) => Promise<UserDetailInfoType>;
   setMyInfo: (myinfo: Partial<UserDetailInfoType>) => void;
   updateMyInfo: (
     id: number,
-    accessToken: string,
     editedInfo: Partial<UserDetailInfoType>
   ) => Promise<Partial<UserDetailInfoType>>;
-  getMyProducts: (accessToken: string) => Promise<ProductListType>;
+  getMyProducts: () => Promise<ProductListType>;
 }
   
 

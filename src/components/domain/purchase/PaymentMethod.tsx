@@ -25,6 +25,9 @@ const PaymentMethod = ({ disabled, paymentOption }: PaymentMethodProps) => {
   const axiosInstance = useCustomAxios();
   const userBasicInfo = useBoundStore((state) => state.userBasicInfo);
   const productDetailData = useBoundStore((state) => state.productDetailData);
+  const setIsToastOpen = useBoundStore((state) => state.setIsToastOpen);
+  const setAlertText = useBoundStore((state) => state.setAlertText);
+  const setBgColor = useBoundStore((state) => state.setBgColor);
 
   console.log(productDetailData);
 
@@ -38,8 +41,8 @@ const PaymentMethod = ({ disabled, paymentOption }: PaymentMethodProps) => {
       pg: "html5_inicis", // PG사
       pay_method: paymentOption, // 결제수단
       merchant_uid: `mid_${new Date().getTime()}`, // 주문번호
-      // amount: productDetailData.price, // 결제금액
-      amount: 1, // 결제금액
+      amount: productDetailData.price, // 결제금액
+      // amount: 100, // 결제금액
       name: productDetailData.name, // 주문상품명
       buyer_name: userBasicInfo.name, // 구매자 이름
       buyer_tel: userBasicInfo.phone, // 구매자 전화번호
@@ -56,7 +59,9 @@ const PaymentMethod = ({ disabled, paymentOption }: PaymentMethodProps) => {
     const { success, error_msg } = response;
     // console.log(response);
     if (success) {
-      alert("결제 성공");
+      setIsToastOpen(true);
+      setAlertText("결제 성공");
+      setBgColor("var(--toast-success)");
       // 실제 결제 성공 후 db에 결제 정보 저장이 됩니다.
       // 오늘 날짜 받아오는 함수
       const nowDate = () => {
@@ -93,7 +98,9 @@ const PaymentMethod = ({ disabled, paymentOption }: PaymentMethodProps) => {
       postData();
       navigate("/purchase/result");
     } else {
-      alert(`결제 실패: ${error_msg}`);
+      setIsToastOpen(true);
+      setAlertText(`결제 실패: ${error_msg}`);
+      setBgColor("var(--toast-error)");
     }
   }
   return (

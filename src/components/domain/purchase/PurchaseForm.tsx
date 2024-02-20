@@ -7,7 +7,6 @@ import {
   RadioGroup,
   Typography,
 } from "@mui/material";
-import { CommonButtonMiddle, CommonButtonSmall } from "../../UI/CommonButton";
 import PurchaseInformation from "./PurchaseInformation";
 import classes from "./purchase.module.css";
 
