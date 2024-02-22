@@ -5,7 +5,7 @@
 ![image](https://i.ibb.co/KxvRbYc/image.png)
 <h3>도심 속 주차장 예약 서비스🚙 🛻</h3><br>
 
-<b>[마이파킹 앱 바로가기](https://my-parking.netlify.app/)</b> <br>
+<b>[마이파킹 앱 바로가기](https://myparking.netlify.app/)</b> <br>
 
 <b>일반회원</b>
 Test ID : `test@user.com` <br>
